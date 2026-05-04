@@ -1,0 +1,92 @@
+[
+    {
+        "id": 1,
+        "sender_id": 1,
+        "receiver_id": 2,
+        "message_text": "hey",
+        "status": "seen",
+        "created_at": "2026-05-04 15:57:18",
+        "delivered_at": "2026-05-04 15:57:18",
+        "seen_at": "2026-05-04 15:57:22"
+    },
+    {
+        "id": 2,
+        "sender_id": 2,
+        "receiver_id": 1,
+        "message_text": "hi",
+        "status": "seen",
+        "created_at": "2026-05-04 15:57:25",
+        "delivered_at": "2026-05-04 15:57:25",
+        "seen_at": "2026-05-04 15:57:25"
+    },
+    {
+        "id": 3,
+        "sender_id": 1,
+        "receiver_id": 2,
+        "message_text": "can you tell me if you can see me??",
+        "status": "seen",
+        "created_at": "2026-05-04 15:57:43",
+        "delivered_at": "2026-05-04 15:57:44",
+        "seen_at": "2026-05-04 15:57:44"
+    },
+    {
+        "id": 4,
+        "sender_id": 1,
+        "receiver_id": 2,
+        "message_text": "are you there?\/",
+        "status": "seen",
+        "created_at": "2026-05-04 15:57:59",
+        "delivered_at": "2026-05-04 15:58:00",
+        "seen_at": "2026-05-04 15:58:23"
+    },
+    {
+        "id": 5,
+        "sender_id": 1,
+        "receiver_id": 2,
+        "message_text": "hey why are not replying??",
+        "status": "seen",
+        "created_at": "2026-05-04 15:58:12",
+        "delivered_at": "2026-05-04 15:58:13",
+        "seen_at": "2026-05-04 15:58:23"
+    },
+    {
+        "id": 6,
+        "sender_id": 2,
+        "receiver_id": 1,
+        "message_text": "i was just doing something.",
+        "status": "seen",
+        "created_at": "2026-05-04 15:58:41",
+        "delivered_at": "2026-05-04 15:58:41",
+        "seen_at": "2026-05-04 15:58:53"
+    },
+    {
+        "id": 7,
+        "sender_id": 1,
+        "receiver_id": 2,
+        "message_text": "hey",
+        "status": "seen",
+        "created_at": "2026-05-04 15:58:56",
+        "delivered_at": "2026-05-04 15:58:57",
+        "seen_at": "2026-05-04 15:58:57"
+    },
+    {
+        "id": 8,
+        "sender_id": 2,
+        "receiver_id": 1,
+        "message_text": "hry",
+        "status": "seen",
+        "created_at": "2026-05-04 15:59:02",
+        "delivered_at": "2026-05-04 15:59:03",
+        "seen_at": "2026-05-04 15:59:03"
+    },
+    {
+        "id": 9,
+        "sender_id": 2,
+        "receiver_id": 1,
+        "message_text": "are available??",
+        "status": "seen",
+        "created_at": "2026-05-04 16:02:47",
+        "delivered_at": "2026-05-04 16:02:54",
+        "seen_at": "2026-05-04 16:02:54"
+    }
+]
