@@ -402,6 +402,7 @@ body {
 
 .message-row {
     display: flex;
+    align-items: flex-end; /* keeps small profile circle aligned with bottom of bubble */
     margin-bottom: 14px;
     transition: transform 0.22s ease, opacity 0.22s ease;
 }
@@ -414,6 +415,55 @@ body {
     justify-content: flex-start;
 }
 
+/* =====================================================
+   SMALL PROFILE CIRCLE BESIDE MESSAGE BUBBLES
+
+   Received message:
+   [G] message bubble
+
+   Sent message:
+   message bubble [A]
+
+   The HTML for this is created from chat.js using:
+   <div class="message-avatar">A</div>
+===================================================== */
+
+.message-avatar {
+    width: 28px;
+    height: 28px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    font-size: 12px;
+    font-weight: bold;
+    line-height: 1;
+    box-shadow: 0 8px 16px rgba(8, 52, 116, 0.12);
+    margin-bottom: 4px;
+}
+
+/* Avatar beside received messages.
+   It appears on the left side of the gray/white bubble. */
+.message-row.received .message-avatar {
+    margin-right: 8px;
+    background: linear-gradient(135deg, #ffffff 0%, #e9f3ff 100%);
+    color: var(--theme-blue);
+    border: 1px solid rgba(11, 103, 209, 0.16);
+}
+
+/* Avatar beside my sent messages.
+   It appears on the right side of the blue bubble. */
+.message-row.sent .message-avatar {
+    margin-left: 8px;
+    background: linear-gradient(135deg, var(--theme-blue) 0%, var(--theme-cyan) 100%);
+    color: white;
+}
+
+/* Optional: make the avatar animate together with new messages. */
+.message-row.message-new .message-avatar {
+    animation: avatarPop 0.42s ease;
+}
+
 .bubble {
     max-width: 62%;
     padding: 14px 16px;
@@ -424,6 +474,13 @@ body {
     box-shadow: var(--shadow-bubble);
     position: relative;
     transform-origin: bottom center;
+}
+
+/* The actual message text is inserted by chat.js inside .message-text.
+   This block keeps text wrapping clean when the message is long. */
+.message-text {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
 }
 
 .sent .bubble {
@@ -568,6 +625,23 @@ body {
     }
     100% {
         box-shadow: var(--shadow-bubble);
+    }
+}
+
+@keyframes avatarPop {
+    0% {
+        opacity: 0;
+        transform: scale(0.75);
+    }
+
+    70% {
+        opacity: 1;
+        transform: scale(1.08);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1);
     }
 }
 

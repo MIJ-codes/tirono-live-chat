@@ -298,5 +298,55 @@
         "created_at": "2026-05-04 17:36:26",
         "delivered_at": "2026-05-04 17:36:26",
         "seen_at": "2026-05-04 17:36:29"
+    },
+    {
+        "id": 31,
+        "sender_id": 1,
+        "receiver_id": 2,
+        "message_text": "hey",
+        "status": "seen",
+        "created_at": "2026-05-05 10:14:04",
+        "delivered_at": "2026-05-05 10:14:53",
+        "seen_at": "2026-05-05 10:14:53"
+    },
+    {
+        "id": 32,
+        "sender_id": 1,
+        "receiver_id": 2,
+        "message_text": "hello",
+        "status": "seen",
+        "created_at": "2026-05-05 10:32:36",
+        "delivered_at": "2026-05-05 10:32:53",
+        "seen_at": "2026-05-05 10:32:53"
+    },
+    {
+        "id": 33,
+        "sender_id": 1,
+        "receiver_id": 2,
+        "message_text": "hi",
+        "status": "seen",
+        "created_at": "2026-05-05 10:59:42",
+        "delivered_at": "2026-05-05 10:59:53",
+        "seen_at": "2026-05-05 10:59:53"
+    },
+    {
+        "id": 34,
+        "sender_id": 2,
+        "receiver_id": 1,
+        "message_text": "yes i do",
+        "status": "seen",
+        "created_at": "2026-05-05 11:00:08",
+        "delivered_at": "2026-05-05 11:00:08",
+        "seen_at": "2026-05-05 11:00:08"
+    },
+    {
+        "id": 35,
+        "sender_id": 2,
+        "receiver_id": 1,
+        "message_text": "what about now??",
+        "status": "seen",
+        "created_at": "2026-05-05 11:00:22",
+        "delivered_at": "2026-05-05 11:00:23",
+        "seen_at": "2026-05-05 11:00:34"
     }
 ]
