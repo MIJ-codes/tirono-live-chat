@@ -27,7 +27,7 @@ $currentUserName = $USERS[$currentUserId]["name"];
 
 <div class="app">
 
-    <!-- Column 1: black sidebar -->
+    <!-- Column 1: blue sidebar -->
     <aside class="black-sidebar">
 
         <button class="icon-btn" id="homeBtn" title="Home">
@@ -101,8 +101,19 @@ $currentUserName = $USERS[$currentUserId]["name"];
             </header>
 
             <div id="messageArea" class="message-area">
-                <div class="empty-chat">Choose a chat from the left side.</div> 
+                <div class="empty-chat">Choose a chat from the left side.</div>
             </div>
+
+            <!--
+                Jump to latest message button.
+
+                Hidden by default.
+                chat.js shows this button only when the user scrolls far above
+                the latest message.
+            -->
+            <button type="button" id="jumpToBottomBtn" class="jump-to-bottom-btn is-hidden" title="Jump to latest message">
+                ↓
+            </button>
 
             <!--
                 Typing indicator.
@@ -123,19 +134,18 @@ $currentUserName = $USERS[$currentUserId]["name"];
 
             <footer class="input-area">
                 <button type="button" id="attachmentBtn" class="attachment-btn" title="Attach file">📎</button>
-                    <input type="file" id="attachmentInput" class="attachment-input">
+                <input type="file" id="attachmentInput" class="attachment-input">
 
-                    <div class="input-wrap">
-                        <input type="text" id="messageInput" placeholder="Type your message...">
+                <div class="input-wrap">
+                    <input type="text" id="messageInput" placeholder="Type your message...">
 
-                        <div id="attachmentPreview" class="attachment-preview is-hidden">
-                            <span id="attachmentFileName"></span>
-                            <button type="button" id="removeAttachmentBtn">×</button>
-                        </div>
+                    <div id="attachmentPreview" class="attachment-preview is-hidden">
+                        <span id="attachmentFileName"></span>
+                        <button type="button" id="removeAttachmentBtn">×</button>
                     </div>
+                </div>
 
                 <button id="sendBtn">Send</button>
-
             </footer>
         </main>
 

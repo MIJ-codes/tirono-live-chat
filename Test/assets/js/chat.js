@@ -72,6 +72,14 @@ const TYPING_SEND_INTERVAL_MS = 1500;
 let lastTypingSentAt = 0;
 let typingClearTimer = null;
 
+/*
+    Jump-to-latest-message button control.
+
+    If the user scrolls more than this many pixels above the
+    latest message, the ↓ button appears.
+*/
+const JUMP_BUTTON_SHOW_DISTANCE = 260;
+
 
 /* =====================================================
    PAGE READY
@@ -86,6 +94,18 @@ $(document).ready(function () {
     $("#chatBtn").on("click", showChat);
 
     $("#sendBtn").on("click", sendMessage);
+
+    /*
+        Jump to latest message button.
+
+        When user scrolls far above the latest message,
+        this button appears. Clicking it returns the user
+        to the bottom of the message area.
+    */
+    $("#jumpToBottomBtn").on("click", function () {
+        smoothScrollToBottom();
+        hideJumpToBottomButton();
+    });
 
     $("#messageInput").on("keypress", function (event) {
         if (event.key === "Enter") {
@@ -103,6 +123,14 @@ $(document).ready(function () {
     */
     $("#messageInput").on("input", function () {
         handleTypingInput();
+    });
+
+    /*
+        When user manually scrolls the message area,
+        decide whether the jump-to-latest button should appear.
+    */
+    $("#messageArea").on("scroll", function () {
+        updateJumpToBottomButton();
     });
 
     /*
@@ -355,6 +383,7 @@ function updateChatItem(chatItem, chat) {
     chatItem.find(".avatar").text(chat.avatar);
     chatItem.find(".chat-name-text").text(chat.name);
     chatItem.find(".chat-time").text(chat.latest_time);
+
     /*
         Chat history preview.
 
@@ -421,6 +450,7 @@ function openChat(userId, userName) {
     currentChatUserName = userName;
 
     hideMainTypingIndicator();
+    hideJumpToBottomButton();
 
     $("#chatUserName").text(userName);
     $("#chatInfo").text("Conversation opened. Messages update without page reload.");
@@ -523,6 +553,7 @@ function updateMessagesDom(messages, wasNearBottom, previousScrollTop) {
         messageCache.clear();
         renderedMessageIds.clear();
         forceScrollToBottomOnce = false;
+        hideJumpToBottomButton();
         return;
     }
 
@@ -608,8 +639,12 @@ function updateMessagesDom(messages, wasNearBottom, previousScrollTop) {
     if (forceScrollToBottomOnce || isFirstLoad || (hasNewMessage && wasNearBottom)) {
         smoothScrollToBottom();
         forceScrollToBottomOnce = false;
+        hideJumpToBottomButton();
     } else if (hasAnyVisualChange && !wasNearBottom) {
         messageArea.scrollTop(previousScrollTop);
+        updateJumpToBottomButton();
+    } else {
+        updateJumpToBottomButton();
     }
 }
 
@@ -1006,23 +1041,54 @@ function clearAttachment() {
    SCROLL HELPERS
 ===================================================== */
 
-function isMessageAreaNearBottom() {
+function getMessageAreaDistanceFromBottom() {
     const messageArea = $("#messageArea");
 
     if (messageArea.length === 0) {
-        return true;
+        return 0;
     }
 
     const element = messageArea[0];
 
-    const distanceFromBottom =
-        element.scrollHeight - element.scrollTop - element.clientHeight;
+    return element.scrollHeight - element.scrollTop - element.clientHeight;
+}
 
+function updateJumpToBottomButton() {
+    /*
+        Do not show the button if no chat is open.
+    */
+    if (currentChatUserId === null) {
+        hideJumpToBottomButton();
+        return;
+    }
+
+    const distanceFromBottom = getMessageAreaDistanceFromBottom();
+
+    /*
+        If the user is far enough above the latest message,
+        show the button.
+    */
+    if (distanceFromBottom > JUMP_BUTTON_SHOW_DISTANCE) {
+        showJumpToBottomButton();
+    } else {
+        hideJumpToBottomButton();
+    }
+}
+
+function showJumpToBottomButton() {
+    $("#jumpToBottomBtn").removeClass("is-hidden");
+}
+
+function hideJumpToBottomButton() {
+    $("#jumpToBottomBtn").addClass("is-hidden");
+}
+
+function isMessageAreaNearBottom() {
     /*
         If user is within 120px of the bottom,
         we treat them as already reading latest messages.
     */
-    return distanceFromBottom < 120;
+    return getMessageAreaDistanceFromBottom() < 120;
 }
 
 function smoothScrollToBottom() {
@@ -1031,7 +1097,10 @@ function smoothScrollToBottom() {
     if (messageArea.length > 0) {
         messageArea.stop().animate(
             { scrollTop: messageArea[0].scrollHeight },
-            280
+            280,
+            function () {
+                updateJumpToBottomButton();
+            }
         );
     }
 }

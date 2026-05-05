@@ -362,6 +362,14 @@ body {
     background:
         radial-gradient(circle at top right, rgba(20,170,245,0.08), transparent 20%),
         linear-gradient(180deg, #eef5fc 0%, #eaf2fb 100%);
+
+    /*
+        Important for the jump-to-latest button.
+
+        The button uses position: absolute,
+        so .chat-main must be the positioning parent.
+    */
+    position: relative;
 }
 
 .chat-header {
@@ -509,8 +517,6 @@ body {
 .received .meta {
     color: var(--muted);
 }
-
-
 
 /* =====================================================
    TYPING INDICATOR IN MAIN CHAT BOX
@@ -861,4 +867,69 @@ body {
         opacity: 1;
         transform: translateY(0) scale(1);
     }
+}
+
+/* =====================================================
+   JUMP TO LATEST MESSAGE BUTTON
+
+   This appears only when the user scrolls far above the
+   latest message in the message area.
+
+   The button itself is created in index.php:
+   <button id="jumpToBottomBtn">↓</button>
+
+   The show/hide behavior will be controlled by chat.js.
+
+   Position:
+   centered horizontally inside the main message window.
+===================================================== */
+
+.jump-to-bottom-btn {
+    position: absolute;
+
+    /*
+        Center horizontally inside .chat-main.
+        left: 50% moves the button start to the center,
+        translateX(-50%) pulls it back by half of its own width.
+    */
+    left: 50%;
+    right: auto;
+    bottom: 104px;
+    transform: translateX(-50%);
+
+    z-index: 20;
+
+    width: 42px;
+    height: 42px;
+    border: none;
+    border-radius: 50%;
+
+    background: linear-gradient(135deg, var(--theme-blue) 0%, var(--theme-cyan) 100%);
+    color: white;
+
+    font-size: 22px;
+    font-weight: bold;
+    cursor: pointer;
+
+    display: grid;
+    place-items: center;
+
+    box-shadow: 0 12px 28px rgba(8, 52, 116, 0.22);
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        opacity 0.2s ease;
+}
+
+.jump-to-bottom-btn:hover {
+    transform: translateX(-50%) translateY(-3px) scale(1.04);
+    box-shadow: 0 16px 34px rgba(8, 52, 116, 0.28);
+}
+
+.jump-to-bottom-btn:active {
+    transform: translateX(-50%) translateY(0) scale(0.98);
+}
+
+.jump-to-bottom-btn.is-hidden {
+    display: none;
 }
