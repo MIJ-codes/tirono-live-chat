@@ -29,8 +29,17 @@ $currentUserName = $USERS[$currentUserId]["name"];
 
     <!-- Column 1: black sidebar -->
     <aside class="black-sidebar">
-        <button class="icon-btn" id="homeBtn" title="Home">🏠</button>
-        <button class="icon-btn" id="chatBtn" title="Chat">💬</button>
+
+        <button class="icon-btn" id="homeBtn" title="Home">
+            <img class="sidebar-icon icon-normal" src="assets/icons/home.png" alt="Home">
+            <img class="sidebar-icon icon-active" src="assets/icons/home-active.png" alt="Home active">
+        </button>
+
+        <button class="icon-btn" id="chatBtn" title="Chat">
+            <img class="sidebar-icon icon-normal" src="assets/icons/chat.png" alt="Chat">
+            <img class="sidebar-icon icon-active" src="assets/icons/chat-active.png" alt="Chat active">
+        </button>
+
     </aside>
 
     <!-- Home page -->
@@ -92,12 +101,24 @@ $currentUserName = $USERS[$currentUserId]["name"];
             </header>
 
             <div id="messageArea" class="message-area">
-                <div class="empty-chat">Choose a chat from the left side.</div>
+                <div class="empty-chat">Choose a chat from the left side.</div> 
             </div>
 
             <footer class="input-area">
-                <input type="text" id="messageInput" placeholder="Type a message...">
+                <button type="button" id="attachmentBtn" class="attachment-btn" title="Attach file">📎</button>
+                    <input type="file" id="attachmentInput" class="attachment-input">
+
+                    <div class="input-wrap">
+                        <input type="text" id="messageInput" placeholder="Type your message...">
+
+                        <div id="attachmentPreview" class="attachment-preview is-hidden">
+                            <span id="attachmentFileName"></span>
+                            <button type="button" id="removeAttachmentBtn">×</button>
+                        </div>
+                    </div>
+
                 <button id="sendBtn">Send</button>
+
             </footer>
         </main>
 

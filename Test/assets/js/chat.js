@@ -1,5 +1,8 @@
 let currentChatUserId = null;
 let currentChatUserName = "";
+let renderedMessageIds = new Set();
+
+let selectedAttachmentFile = null;
 
 $(document).ready(function () {
     showHome();
@@ -14,6 +17,29 @@ $(document).ready(function () {
         if (event.key === "Enter") {
             sendMessage();
         }
+    });
+
+    /*
+        Attachment UI only.
+
+        This does NOT upload the file yet.
+        It only:
+        1. opens the file picker
+        2. stores the selected file in selectedAttachmentFile
+        3. shows the selected filename
+        4. allows removing the selected file
+    */
+    $("#attachmentBtn").on("click", function () {
+        $("#attachmentInput").click();
+    });
+
+    $("#attachmentInput").on("change", function () {
+        selectedAttachmentFile = this.files[0] || null;
+        updateAttachmentPreview();
+    });
+
+    $("#removeAttachmentBtn").on("click", function () {
+        clearAttachment();
     });
 
     $(document).on("click", ".chat-item", function () {
@@ -118,6 +144,10 @@ function loadChatHistory() {
 }
 
 function openChat(userId, userName) {
+    if (Number(currentChatUserId) !== Number(userId)) {
+        renderedMessageIds = new Set();
+    }
+
     currentChatUserId = userId;
     currentChatUserName = userName;
 
@@ -148,6 +178,7 @@ function loadMessages() {
             }
 
             let html = "";
+            const newRenderedIds = new Set();
 
             if (response.messages.length === 0) {
                 html = `<div class="empty-chat">No messages yet. Start the conversation.</div>`;
@@ -157,6 +188,12 @@ function loadMessages() {
                 const sentByMe = Number(message.sender_id) === Number(CURRENT_USER_ID);
                 const rowClass = sentByMe ? "sent" : "received";
 
+                const messageId = Number(message.id);
+                const isNewMessage = !renderedMessageIds.has(messageId);
+                const newClass = isNewMessage ? "message-new" : "";
+
+                newRenderedIds.add(messageId);
+
                 let meta = escapeHtml(message.time_label);
 
                 if (sentByMe) {
@@ -164,7 +201,7 @@ function loadMessages() {
                 }
 
                 html += `
-                    <div class="message-row ${rowClass}">
+                    <div class="message-row ${rowClass} ${newClass}" data-message-id="${messageId}">
                         <div class="bubble">
                             ${escapeHtml(message.message_text)}
                             <div class="meta">${meta}</div>
@@ -174,7 +211,8 @@ function loadMessages() {
             });
 
             $("#messageArea").html(html);
-            scrollToBottom();
+            renderedMessageIds = newRenderedIds;
+            smoothScrollToBottom();
         }
     });
 }
@@ -187,9 +225,33 @@ function sendMessage() {
 
     const messageText = $("#messageInput").val().trim();
 
-    if (messageText === "") {
+    /*
+        For now:
+        - Text message works normally through AJAX.
+        - Attachment selection UI works.
+        - Actual backend file upload is not connected yet.
+
+        So if only a file is selected with no text, we show a clear message.
+    */
+    if (messageText === "" && selectedAttachmentFile === null) {
         return;
     }
+
+    if (selectedAttachmentFile !== null) {
+        alert("Attachment UI is ready. Backend upload will be connected later.");
+
+        /*
+            Temporary behavior:
+            If user selected a file and also wrote text,
+            the text will still be sent normally.
+            If user selected only a file, nothing will be saved yet.
+        */
+        if (messageText === "") {
+            return;
+        }
+    }
+
+    $("#sendBtn").prop("disabled", true);
 
     $.ajax({
         url: "api.php?action=send_message",
@@ -207,9 +269,14 @@ function sendMessage() {
             }
 
             $("#messageInput").val("");
+            clearAttachment();
 
             loadMessages();
             loadChatHistory();
+        },
+        complete: function () {
+            $("#sendBtn").prop("disabled", false);
+            $("#messageInput").focus();
         }
     });
 }
@@ -240,11 +307,34 @@ function markSeen(userId) {
     });
 }
 
-function scrollToBottom() {
+function updateAttachmentPreview() {
+    if (selectedAttachmentFile === null) {
+        clearAttachment();
+        return;
+    }
+
+    $("#attachmentFileName").text(selectedAttachmentFile.name);
+    $("#attachmentPreview").removeClass("is-hidden");
+    $("#attachmentBtn").addClass("has-file");
+}
+
+function clearAttachment() {
+    selectedAttachmentFile = null;
+
+    $("#attachmentInput").val("");
+    $("#attachmentFileName").text("");
+    $("#attachmentPreview").addClass("is-hidden");
+    $("#attachmentBtn").removeClass("has-file");
+}
+
+function smoothScrollToBottom() {
     const messageArea = $("#messageArea");
 
     if (messageArea.length > 0) {
-        messageArea.scrollTop(messageArea[0].scrollHeight);
+        messageArea.stop().animate(
+            { scrollTop: messageArea[0].scrollHeight },
+            280
+        );
     }
 }
 

@@ -88,5 +88,215 @@
         "created_at": "2026-05-04 16:02:47",
         "delivered_at": "2026-05-04 16:02:54",
         "seen_at": "2026-05-04 16:02:54"
+    },
+    {
+        "id": 10,
+        "sender_id": 1,
+        "receiver_id": 2,
+        "message_text": "what are you saying??",
+        "status": "seen",
+        "created_at": "2026-05-04 16:18:21",
+        "delivered_at": null,
+        "seen_at": "2026-05-04 16:18:22"
+    },
+    {
+        "id": 11,
+        "sender_id": 1,
+        "receiver_id": 2,
+        "message_text": "can you be more specific??",
+        "status": "seen",
+        "created_at": "2026-05-04 16:18:35",
+        "delivered_at": "2026-05-04 16:18:36",
+        "seen_at": "2026-05-04 16:18:36"
+    },
+    {
+        "id": 12,
+        "sender_id": 2,
+        "receiver_id": 1,
+        "message_text": "i just asked if you were available or not??",
+        "status": "seen",
+        "created_at": "2026-05-04 16:19:01",
+        "delivered_at": "2026-05-04 16:19:02",
+        "seen_at": "2026-05-04 16:19:02"
+    },
+    {
+        "id": 13,
+        "sender_id": 2,
+        "receiver_id": 1,
+        "message_text": "Hello Garry",
+        "status": "seen",
+        "created_at": "2026-05-04 16:19:22",
+        "delivered_at": "2026-05-04 16:19:22",
+        "seen_at": "2026-05-04 16:20:14"
+    },
+    {
+        "id": 14,
+        "sender_id": 2,
+        "receiver_id": 1,
+        "message_text": "are you there ?? i am garry",
+        "status": "seen",
+        "created_at": "2026-05-04 16:19:46",
+        "delivered_at": "2026-05-04 16:19:46",
+        "seen_at": "2026-05-04 16:20:14"
+    },
+    {
+        "id": 15,
+        "sender_id": 2,
+        "receiver_id": 1,
+        "message_text": "are you there",
+        "status": "seen",
+        "created_at": "2026-05-04 16:19:56",
+        "delivered_at": "2026-05-04 16:19:57",
+        "seen_at": "2026-05-04 16:20:14"
+    },
+    {
+        "id": 16,
+        "sender_id": 2,
+        "receiver_id": 1,
+        "message_text": "??",
+        "status": "seen",
+        "created_at": "2026-05-04 16:20:01",
+        "delivered_at": "2026-05-04 16:20:02",
+        "seen_at": "2026-05-04 16:20:14"
+    },
+    {
+        "id": 17,
+        "sender_id": 2,
+        "receiver_id": 1,
+        "message_text": "🧐",
+        "status": "seen",
+        "created_at": "2026-05-04 16:20:09",
+        "delivered_at": "2026-05-04 16:20:09",
+        "seen_at": "2026-05-04 16:20:14"
+    },
+    {
+        "id": 18,
+        "sender_id": 2,
+        "receiver_id": 4,
+        "message_text": "hello",
+        "status": "sent",
+        "created_at": "2026-05-04 16:20:46",
+        "delivered_at": null,
+        "seen_at": null
+    },
+    {
+        "id": 19,
+        "sender_id": 2,
+        "receiver_id": 4,
+        "message_text": "can i ask something??",
+        "status": "sent",
+        "created_at": "2026-05-04 16:20:56",
+        "delivered_at": null,
+        "seen_at": null
+    },
+    {
+        "id": 20,
+        "sender_id": 1,
+        "receiver_id": 4,
+        "message_text": "hello",
+        "status": "sent",
+        "created_at": "2026-05-04 16:21:15",
+        "delivered_at": null,
+        "seen_at": null
+    },
+    {
+        "id": 21,
+        "sender_id": 1,
+        "receiver_id": 2,
+        "message_text": "hey",
+        "status": "seen",
+        "created_at": "2026-05-04 17:24:35",
+        "delivered_at": "2026-05-04 17:24:43",
+        "seen_at": "2026-05-04 17:32:24"
+    },
+    {
+        "id": 22,
+        "sender_id": 1,
+        "receiver_id": 2,
+        "message_text": "hello",
+        "status": "seen",
+        "created_at": "2026-05-04 17:32:34",
+        "delivered_at": "2026-05-04 17:32:35",
+        "seen_at": "2026-05-04 17:32:35"
+    },
+    {
+        "id": 23,
+        "sender_id": 2,
+        "receiver_id": 1,
+        "message_text": "hi admin what are you doing??",
+        "status": "seen",
+        "created_at": "2026-05-04 17:32:47",
+        "delivered_at": "2026-05-04 17:32:47",
+        "seen_at": "2026-05-04 17:32:47"
+    },
+    {
+        "id": 24,
+        "sender_id": 1,
+        "receiver_id": 2,
+        "message_text": "hello",
+        "status": "seen",
+        "created_at": "2026-05-04 17:32:59",
+        "delivered_at": null,
+        "seen_at": "2026-05-04 17:32:59"
+    },
+    {
+        "id": 25,
+        "sender_id": 2,
+        "receiver_id": 1,
+        "message_text": "hi",
+        "status": "seen",
+        "created_at": "2026-05-04 17:33:06",
+        "delivered_at": "2026-05-04 17:33:06",
+        "seen_at": "2026-05-04 17:33:06"
+    },
+    {
+        "id": 26,
+        "sender_id": 1,
+        "receiver_id": 2,
+        "message_text": "hey how are you??",
+        "status": "seen",
+        "created_at": "2026-05-04 17:35:12",
+        "delivered_at": "2026-05-04 17:35:13",
+        "seen_at": "2026-05-04 17:35:13"
+    },
+    {
+        "id": 27,
+        "sender_id": 1,
+        "receiver_id": 2,
+        "message_text": "this is a test phase",
+        "status": "seen",
+        "created_at": "2026-05-04 17:35:58",
+        "delivered_at": "2026-05-04 17:35:59",
+        "seen_at": "2026-05-04 17:35:59"
+    },
+    {
+        "id": 28,
+        "sender_id": 2,
+        "receiver_id": 1,
+        "message_text": "is this some so",
+        "status": "seen",
+        "created_at": "2026-05-04 17:36:01",
+        "delivered_at": "2026-05-04 17:36:02",
+        "seen_at": "2026-05-04 17:36:02"
+    },
+    {
+        "id": 29,
+        "sender_id": 2,
+        "receiver_id": 1,
+        "message_text": "do you see me now??",
+        "status": "seen",
+        "created_at": "2026-05-04 17:36:16",
+        "delivered_at": "2026-05-04 17:36:17",
+        "seen_at": "2026-05-04 17:36:29"
+    },
+    {
+        "id": 30,
+        "sender_id": 2,
+        "receiver_id": 1,
+        "message_text": "can you reply??",
+        "status": "seen",
+        "created_at": "2026-05-04 17:36:26",
+        "delivered_at": "2026-05-04 17:36:26",
+        "seen_at": "2026-05-04 17:36:29"
     }
 ]
