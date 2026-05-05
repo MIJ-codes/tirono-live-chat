@@ -104,6 +104,23 @@ $currentUserName = $USERS[$currentUserId]["name"];
                 <div class="empty-chat">Choose a chat from the left side.</div> 
             </div>
 
+            <!--
+                Typing indicator.
+
+                This is hidden by default.
+                chat.js shows it when the selected chat user is typing.
+            -->
+            <div id="typingIndicator" class="typing-indicator is-hidden">
+                <span id="typingUserName"></span>
+                <span>is typing</span>
+
+                <span class="typing-dots" aria-hidden="true">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </span>
+            </div>
+
             <footer class="input-area">
                 <button type="button" id="attachmentBtn" class="attachment-btn" title="Attach file">📎</button>
                     <input type="file" id="attachmentInput" class="attachment-input">

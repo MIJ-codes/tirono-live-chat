@@ -510,6 +510,91 @@ body {
     color: var(--muted);
 }
 
+
+
+/* =====================================================
+   TYPING INDICATOR IN MAIN CHAT BOX
+
+   This appears above the input area when the other user
+   is typing in the currently opened chat.
+===================================================== */
+
+.typing-indicator {
+    min-height: 32px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 0 24px 10px;
+    color: var(--muted);
+    font-size: 13px;
+}
+
+.typing-indicator.is-hidden {
+    display: none;
+}
+
+#typingUserName {
+    font-weight: bold;
+    color: var(--theme-blue-deep);
+}
+
+/* Animated three-dot typing effect. */
+.typing-dots {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    margin-left: 2px;
+}
+
+.typing-dots span {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--theme-blue);
+    opacity: 0.35;
+    animation: typingDotPulse 1s infinite ease-in-out;
+}
+
+.typing-dots span:nth-child(2) {
+    animation-delay: 0.15s;
+}
+
+.typing-dots span:nth-child(3) {
+    animation-delay: 0.3s;
+}
+
+@keyframes typingDotPulse {
+    0%,
+    80%,
+    100% {
+        transform: translateY(0);
+        opacity: 0.35;
+    }
+
+    40% {
+        transform: translateY(-4px);
+        opacity: 1;
+    }
+}
+
+/* =====================================================
+   TYPING PREVIEW IN LEFT CHAT HISTORY
+
+   When someone is typing, the latest-message preview
+   changes to: typing...
+===================================================== */
+
+.chat-preview.typing-preview {
+    color: var(--theme-blue);
+    font-weight: bold;
+}
+
+.chat-preview.typing-preview .typing-dots span {
+    width: 4px;
+    height: 4px;
+}
+
 /* =====================================================
    INPUT AREA
 ===================================================== */

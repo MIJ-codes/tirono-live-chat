@@ -60,6 +60,18 @@ let forceScrollToBottomOnce = false;
 let isLoadingChatHistory = false;
 let isLoadingMessages = false;
 
+/*
+    Typing indicator control.
+
+    We do NOT send AJAX on every keypress.
+    Instead, typing updates are throttled:
+    - sender sends set_typing at most once every 1.5 seconds
+    - receiver sees typing through loadChatHistory() polling
+*/
+const TYPING_SEND_INTERVAL_MS = 1500;
+let lastTypingSentAt = 0;
+let typingClearTimer = null;
+
 
 /* =====================================================
    PAGE READY
@@ -79,6 +91,18 @@ $(document).ready(function () {
         if (event.key === "Enter") {
             sendMessage();
         }
+    });
+
+    /*
+        Detect typing locally.
+
+        The browser already knows I am typing because the input event
+        fires whenever the message box changes.
+
+        handleTypingInput() sends a throttled AJAX typing signal.
+    */
+    $("#messageInput").on("input", function () {
+        handleTypingInput();
     });
 
     /*
@@ -259,6 +283,14 @@ function updateChatHistoryDom(chats) {
             chatList.append(item);
         });
     }
+
+    /*
+        The same get_chats response tells us whether the currently
+        opened chat user is typing.
+
+        So we update the main typing indicator from here too.
+    */
+    updateMainTypingIndicatorFromChats(chats);
 }
 
 function createChatItem(chat) {
@@ -303,6 +335,7 @@ function updateChatItem(chatItem, chat) {
         latest_message: chat.latest_message,
         latest_time: chat.latest_time,
         unread: Number(chat.unread),
+        is_typing: Boolean(chat.is_typing),
         active: Number(chat.user_id) === Number(currentChatUserId)
     });
 
@@ -322,7 +355,31 @@ function updateChatItem(chatItem, chat) {
     chatItem.find(".avatar").text(chat.avatar);
     chatItem.find(".chat-name-text").text(chat.name);
     chatItem.find(".chat-time").text(chat.latest_time);
-    chatItem.find(".chat-preview").text(chat.latest_message);
+    /*
+        Chat history preview.
+
+        Normal state:
+        show latest message.
+
+        Typing state:
+        show animated typing... preview.
+    */
+    const preview = chatItem.find(".chat-preview");
+
+    if (chat.is_typing) {
+        preview.addClass("typing-preview");
+        preview.html(`
+            typing
+            <span class="typing-dots" aria-hidden="true">
+                <span></span>
+                <span></span>
+                <span></span>
+            </span>
+        `);
+    } else {
+        preview.removeClass("typing-preview");
+        preview.text(chat.latest_message);
+    }
 
     const unreadSlot = chatItem.find(".unread-slot");
 
@@ -349,10 +406,21 @@ function getCurrentChatDomOrder() {
 ===================================================== */
 
 function openChat(userId, userName) {
+    const previousChatUserId = currentChatUserId;
     const changedChat = Number(currentChatUserId) !== Number(userId);
+
+    /*
+        If user switches chat while typing, clear typing signal
+        for the previous receiver first.
+    */
+    if (changedChat && previousChatUserId !== null) {
+        clearTypingSignal(previousChatUserId);
+    }
 
     currentChatUserId = userId;
     currentChatUserName = userName;
+
+    hideMainTypingIndicator();
 
     $("#chatUserName").text(userName);
     $("#chatInfo").text("Conversation opened. Messages update without page reload.");
@@ -729,6 +797,13 @@ function sendMessage() {
             clearAttachment();
 
             /*
+                Clear typing immediately after sending.
+                The backend also clears typing in send_message,
+                but this keeps frontend state clean too.
+            */
+            clearTypingSignal();
+
+            /*
                 After sending, we do want to move to the latest message.
             */
             forceScrollToBottomOnce = true;
@@ -781,6 +856,124 @@ function markSeen(userId) {
             }
         }
     });
+}
+
+
+/* =====================================================
+   TYPING INDICATOR AJAX + UI
+
+   How it works:
+   1. When I type, chat.js sends set_typing to api.php.
+   2. api.php stores temporary typing state in typing.json.
+   3. The other browser already polls get_chats every 1 second.
+   4. get_chats returns is_typing = true/false.
+   5. chat.js shows typing animation in chat history and main chat.
+===================================================== */
+
+function handleTypingInput() {
+    if (currentChatUserId === null) {
+        return;
+    }
+
+    const messageText = $("#messageInput").val().trim();
+
+    /*
+        If input is empty, clear typing status immediately.
+    */
+    if (messageText === "") {
+        clearTypingSignal();
+        return;
+    }
+
+    sendTypingSignalThrottled();
+
+    /*
+        If user stops typing for 3 seconds,
+        clear typing status.
+
+        The backend also expires typing after 3 seconds,
+        but this makes the UI feel cleaner.
+    */
+    clearTimeout(typingClearTimer);
+
+    typingClearTimer = setTimeout(function () {
+        clearTypingSignal();
+    }, 3000);
+}
+
+function sendTypingSignalThrottled() {
+    if (currentChatUserId === null) {
+        return;
+    }
+
+    const now = Date.now();
+
+    /*
+        Do not send typing AJAX on every keypress.
+        Send at most once every 1.5 seconds.
+    */
+    if (now - lastTypingSentAt < TYPING_SEND_INTERVAL_MS) {
+        return;
+    }
+
+    lastTypingSentAt = now;
+
+    $.ajax({
+        url: "api.php?action=set_typing",
+        method: "POST",
+        data: {
+            user_id: CURRENT_USER_ID,
+            receiver_id: currentChatUserId
+        },
+        dataType: "json"
+    });
+}
+
+function clearTypingSignal(receiverId = currentChatUserId) {
+    if (receiverId === null || receiverId === undefined) {
+        return;
+    }
+
+    clearTimeout(typingClearTimer);
+    typingClearTimer = null;
+    lastTypingSentAt = 0;
+
+    $.ajax({
+        url: "api.php?action=clear_typing",
+        method: "POST",
+        data: {
+            user_id: CURRENT_USER_ID,
+            receiver_id: receiverId
+        },
+        dataType: "json"
+    });
+}
+
+function updateMainTypingIndicatorFromChats(chats) {
+    if (currentChatUserId === null) {
+        hideMainTypingIndicator();
+        return;
+    }
+
+    const activeChat = chats.find(function (chat) {
+        return Number(chat.user_id) === Number(currentChatUserId);
+    });
+
+    if (activeChat && activeChat.is_typing) {
+        showMainTypingIndicator(activeChat.name);
+    } else {
+        hideMainTypingIndicator();
+    }
+}
+
+function showMainTypingIndicator(userName) {
+    $("#typingUserName").text(userName);
+    $("#typingIndicator").removeClass("is-hidden");
+}
+
+function hideMainTypingIndicator() {
+    $("#typingIndicator").addClass("is-hidden");
+    $("#typingUserName").text("");
 }
 
 
